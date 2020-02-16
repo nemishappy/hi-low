@@ -24,25 +24,25 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.post('/api/user/login', (req, res) => {
-    // ให้ ส่งข้อความอะไรสักอย่างหากเกิด status 40x
     let { username, password } = req.body
     if (!(username && password)) {
-        res.status(400).send('Please enter username and passwordddddddddddd')
+        res.status(400).send('Check username or password')
         return
-    }/* ใส่ query string ที่แสดงค่า user ที่มี username=$1จาก table account */
-    client.query( 'SELECT user FROM account WHERE username=$1',[username], (err, data) => {
+    }
+
+    client.query('SELECT * FROM account WHERE username=$1', [username], (err, data) => {
         if (err) {
-            res.status(401).send('Usernaem or password is not correct')
+            res.status(401).send('Unauthorized')
         }
         else if (data.rows[0] == undefined) {
-            res.status(401).send('Data not found')
+            res.status(401).send('Unauthorized')
         }
         else {
             if (data.rows[0]['password'] != password) {
-                res.status(401).send('Usernaem or password is not correct')
+                res.status(401).send('Unauthorized')
             }
             else {
-                res.status(202).send('Welcome'+username)
+                res.status(202).send('success')
             }
         }
     })
@@ -59,8 +59,7 @@ app.post('/api/user', (req, res) => {
                 res.status(406).send('Cannot')
             } else {
                 //ส่งข้อความบอกว่าสร้างบัญชีเสร็จแล้ว (อะไรก็ได้)
-                res.send('Complete')
-                res.status(201)
+                res.status(201).send('Complete')
             }
         })
 
