@@ -27,7 +27,7 @@ app.post('/api/user/login', (req, res) => {
     // ให้ ส่งข้อความอะไรสักอย่างหากเกิด status 40x
     let { username, password } = req.body
     if (!(username && password)) {
-        res.status(400).send('Please enter username and passworddddd')
+        res.status(400).send('Please enter username and password')
         return
     }/* ใส่ query string ที่แสดงค่า user ที่มี username=$1จาก table account */
     client.query( 'SELECT user FROM account WHERE username=$1',[username], (err, data) => {
